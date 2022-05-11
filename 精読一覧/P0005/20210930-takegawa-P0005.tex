@@ -1,0 +1,180 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0005
+\\
+\hline
+日付  &  2021年09月29日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Sadaaki Miyamoto,Kenta Arai
+\\ \hline
+英文タイトル  & Different Sequential Clustering Algorithms and Sequential Regression Models
+\\ \hline
+和文タイトル  & 逐次型クラスタリングアルゴリズムと逐次型回帰モデルの違い
+\\ \hline
+書誌情報  &  FUZZ-IEEE, pp1107-1112, 2009
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{論文の要約}
+本稿で注目する項目である，
+論文のトピック，ベースとなった手法，提案手法のコア要素，
+実験デザイン・結果と考察，手法の限界・今後の課題についてまとめる．
+この項目は最後に作成する．
+
+\section{論文のトピック}
+本論文では、クラスタを逐次抽出する手法として、3つのアプローチから4つのアルゴリズムを開発した。
+
+\section{ベースとなった手法}
+\subsection{Possibilisticクラスタリング}
+Possiblistic法クラスタリングは目的関数の最適化に基づいており、以下の2つの式(\ref{J_e},\ref{J_2})を定義する。この式は、論文\cite{ref1}によって提案されている。ただし、$m=2,\eta_{i}=\zeta^{-1}(i=1, \ldots, c)$とする。
+\begin{align}
+	\label{J_2}
+	J_{2}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left(u_{k i}\right)^{m} D_{k i}+\sum_{i=1}^{c} \eta_{i} \sum_{k=1}^{n}\left(1-u_{k i}\right)^{m}
+\end{align}
+\begin{align}
+	\label{J_e}
+	J_{e}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left\{u_{k i} D_{k i}+\lambda^{-1} u_{k i}\left(\log u_{k i}-1\right)\right\}
+\end{align}
+\section{提案手法のコア要素}
+\subsection{Possibilisticクラスタリングと逐次抽出クラスタリング}
+このアルゴリズムの詳細については、参考文献リストP0004の方が説明がされている。アルゴリズムについてのみ下記に記す。
+\begin{description}
+	\item[SC:] General Procedure for Sequential Clustering Algorithms
+	\item[SC1.] 初期の対象物の集合を$X^{(0)}= X$、$k= 0$とし、対象物の集合$X^{(k)}$を持つ関数$J(v;k)= j_e(v)$（または$J(v;k)= j_2(v）)$とする。
+	\item[SC2.]$J(v;k)$の最小化要素を検索します。
+	\begin{align}
+		v^{(k)}=\arg \min _{v} J(v ; k)
+	\end{align}
+	\item[SC3.]中心$v^{(k)}$に属するクラスタ$G^{(k)}$を抽出します。
+	\item[SC4.]$X^{(k+1)} = X^{(k)} - G^{(k)}$ とする。$X^{(k+1)}$がもう1つのクラスタを抽出するのに十分な要素を持っていない場合は停止し、そうでない場合は$k := k +1$とし、ステップSC2に進む。
+	\item[END SC.]
+\end{description}
+
+\subsection{Mountain medoid クラスタリング}
+Mountainクラスタリングとは、mountainクラスタリングは、クラスターを順次、すなわち一度に1つずつ抽出するものである。特徴として、$y$は格子点に限定されることが挙げられる。
+目的関数に対する更新式が停止するまで繰り返す。
+
+\subsection{ノイズクラスタリングに基づいた逐次抽出クラスタリング}
+ノイズクラスタリングの方法を検討する。この方法では、次の2つの目的関数のいずれかを用いる。
+\begin{align}
+	\label{J2n}
+	J_{2 n}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left(u_{k i}\right)^{m} D_{k i}+\sum_{k=1}^{n}\left(u_{k 0}\right)^{m} \delta
+\end{align}
+\begin{align}
+	\label{Jen}
+	J_{e n}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left\{u_{k i} D_{k i}+\lambda^{-1} u_{k i} \log u_{k i}\right\}+\sum_{k=1}^{n} u_{k 0} \delta
+\end{align}
+ここで、$u_{k0}$はノイズクラスタへの帰属度であり、 $0; \delta > 0$ は、すべてのオブジェクトがノイズ・クラスターから一定の非類似度$\delta$を持つことを示すパラメータである。この目的関数を、$c=1$に設定して、アルゴリズムSCで使用する。
+
+\subsection{回帰モデルの逐次抽出型クラスタリング}
+4.3節と同様の手法で、回帰モデルについて当てはめて考える。そこで、以下の2式の目的関数を考える。ここで${(x_k,y_k)}_{k=1,..n}$で、$x_{k} \in \boldsymbol{R}^{p}$は$p$次元のデータとする。目的関数(\ref{J2n})を(\ref{J2nr})（または(\ref{Jen})を(\ref{Jenr})）に置き換えると、同じ逐次アルゴリズムSCを使って複数の回帰モデルを持つことができる。
+\begin{align}
+	\label{J2nr}
+	\begin{aligned}
+J_{2 n r}(U, B) &=\sum_{k=1}^{n}\left(u_{k i}\right)^{m}\left(y_{k}-\sum_{j=1}^{p} \beta_{j} x_{k}^{j}+\beta_{p+1}\right)^{2}
+&+\sum_{k=1}^{n}\left(u_{k 0}\right)^{m} \delta
+\end{aligned}
+\end{align}
+
+\begin{align}
+	\label{Jenr}
+	\begin{aligned}
+	J_{e n r}(U, B) &=\sum_{k=1}^{n} \sum_{i=1}^{c} u_{k i}\left(y_{k}-\sum_{j=1}^{p} \beta_{j} x_{k}^{j}+\beta_{p+1}\right)^{2}
+	&+\lambda^{-1} \sum_{k=1}^{n} \sum_{i=1}^{c} u_{k i} \log u_{k i}+\sum_{k=1}^{n} u_{k 0} \delta
+	\end{aligned}
+\end{align}
+\section{実験デザイン・結果と考察}
+ここでは、自身の研究と関連があるものとして、回帰モデルに関する実験についてのみ述べる。この実験では様々な国のGDPとエネルギー消費の関係についての実データを使用している。この図を見ると、実際にクラスタリングできているのが確認できる。
+\section{手法の限界・今後の課題}
+逐次抽出型回帰モデルの実験が少ないように感じた。他の実データでも通用するかどうか実験をして確かめていくことが課題である。
+\section{特に重要な関連研究}
+論文\cite{ref1}は、possibilisticクラスタリングの目的関数について詳細に述べた論文である。また、論文\cite{ref2}は、ノイズクラスタに基づくクラスタリングについて記した論文である。逐次抽出法の先駆け的な論文であり、至急読む必要があると考えている。最後に、\cite{ref3}はmountain クラスタリングについて提唱した論文で、mountainクラスタリングとの比較実験をする場合、読む必要がある論文であると言える。
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+R. Krishnapuram, J.M. Keller, "A possibilistic approach to clustering", IEEE Trans. on Fuzzy Systems , Vol.1, No.2, pp. 98–110, 1993.
+%
+\bibitem{ref2}
+	R. N. Dave and R. Krishnapuram, "Robust clustering methods: a unified view," IEEE Trans. Fuzzy Syst, Vol.5, No.2, pp. 270-293, 1997.
+\bibitem{ref3}
+	Ronald R. Yager and Dimitar P Filev,"Approximate Clustering Via the Mountain Method", IEEE TRANSACTIONS ON SYSTEMS,MAN, AND CYBERNETICS, 1994
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

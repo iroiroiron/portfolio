@@ -1,0 +1,144 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0009
+\\
+\hline
+日付  &  2021年12月03日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  赤穂昭太郎
+\\ \hline
+英文タイトル  &
+\\ \hline
+和文タイトル  & ガウス過程回帰の基礎
+\\ \hline
+書誌情報  &  システム/制御/情報，Vol.~62，No.~10，pp.~390--395，2018
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文はガウス過程回帰についての解説論文である．論文の大半をガウス回帰過程の基礎的な解説に費やしている．またガウス過程回帰とカーネル法との関連や，応用研究として，ベイズ最適化などのトピックについても解説を行っている．
+\section{論文のトピック}
+ガウス過程回帰
+\section{ガウス過程のベイズ推定}
+	\subsection{概要}
+	ガウス過程回帰は，ベイス推定を用いて関数を推定する手法である．そのため，線形回帰$\bm{y} = \bm{a}\bm{x}$における，新たな$\bm{x^*}$に対す力$y^*$は，ベイズの定理を用いて表すことができる．ここで式\eqref{p(a|D)}は$\bm{a}$の事前分布，式\eqref{p(y|xD)}は予測分布を表している．
+
+	\begin{align}
+		p(\boldsymbol{a} \mid D)=\frac{1}{Z} p(\boldsymbol{a}) \prod_{i=1}^{n} p\left(y_{i} \mid \boldsymbol{a}^{\mathrm{T}} \boldsymbol{x}_{i}\right)
+		\label{p(a|D)}
+	\end{align}
+
+	\begin{align}
+		p\left(y^{*} \mid \boldsymbol{x}^{*}, D\right)=\int p(\boldsymbol{a} \mid D) p\left(y^{*} \mid \boldsymbol{a}^{\mathrm{T}} \boldsymbol{x}^{*}\right) d \boldsymbol{a}
+		\label{p(y|xD)}
+	\end{align}
+	ここで，$D$は観測値をまとめたもの，$Z$は正規化定数である．
+
+	この生成モデルをまとめると，事前分布からランダムに$f$が生成され，そこから$X_n$に対する関数値$f(X_n)$が計算される．さらに，ガウスノイズ$\epsilon$が加わることで，$\bm{y} = \bm{f}(X_n) + \epsilon$が観測されるというわけである．
+	\subsection{事前分布}
+	ガウス過程回帰では，任意の$X_n$に対する$f(X_n)$は多変量ガウス分布に従うため，平均関数$m(x)$と共分散関数$v(x,x')$を置く必要がある．ここで平均関数には$m(x)=0$と置き，共分散関数には，$v(x,x') = k(x,x')$とおく．$k(x,x')$はカーネル関数であり，自分で好きなカーネルを選べば良い．
+	\subsection{事後分布}
+	予測したい点の集合を${X_m,Y_m|m=1,...m}$とする．ここで，事前分布から求めた$\bm{y} = \bm{f}(X_n) + \epsilon$と，予測したい点の関数値$\bm{f}(X_m)$の同時分布を求めたい．この同時分布から，$\bm{f}(X_m)$の条件付き分布を求めることで，予測したい点の平均関数と共分散関数を求めることができるからである．ここでは，詳細については割愛するが，以上の操作からもとまる平均関数と共分散関数は以下になる．
+	\begin{align}
+		\hat{m}(x)=\boldsymbol{k}_{n}(x)^{\mathrm{T}}\left(K_{n, n}+\sigma^{2} I_{n}\right)^{-1} \boldsymbol{y}
+	\end{align}
+
+	\begin{align}
+		\begin{aligned}
+\hat{v}\left(x, x^{\prime}\right)= k\left(x, x^{\prime}\right) -\boldsymbol{k}_{n}(x)^{\mathrm{T}}\left(K_{n, n}+\sigma^{2} I_{n}\right)^{-1} \boldsymbol{k}_{n}\left(x^{\prime}\right)
+\end{aligned}
+	\end{align}
+
+両方の式にカーネル関数が含まれており，特に$m_{0}(x) = 0$の時は，カーネル回帰で得られる関数と等しい．つまりこのことから，ガウス過程の期待値とモードについては，カーネル回帰の関数と一致することを意味している．
+
+\section{特に重要な関連研究}
+近年，ベイズ最適化と呼ばれる実験計画の最適化手法として使われている．これは，これまで行った実験結果からガウス過程回帰を用いて，これ以上実験を続けても最適値が得られるかどうかの可能性の度合いを算出する．	この可能性が最大になるように繰り返し実験を行うことで，既存の実験計画よりも少ない工数で実験を行うことができる．実際に，マテリアル・インフォマティクスの分野\cite{ref1}で使われており，関連研究として調査を続ける必要がある．
+
+また，本論文では引用していないが，カーネル法とガウス過程についての類似性についてまとめた論文がある\cite{ref2}．カーネル法とは，カーネル関数の線形和で表される関数空間上で関数のモデル化を行うが，これは厳密にはガウス過程そのものの空間とは異なる．そういった厳密な理論についても研究する必要があり，重要なトピックであると言える．
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	S.~Ju, T.~Shiga, L.~Feug, Z.~Hou, K.~Tsuda and J.~Shiomi: Designing nanostructures for phonon transport via Baysian optimization, Physical Review X, Vol.~7, No.~2, 021024(2017)
+\bibitem{ref2}
+	M.~Kanagawa, P.~Hennig, D.~Sejdinovic and B.~K.~Sriperumbudur:Gaussian Processes and Kernel Methods:A Review on Connection and Equivalences, arXiv:1807.02582v1, 2018
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -1,0 +1,143 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0011
+\\
+\hline
+日付  &  2021年12月05日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  大井　祐介, 遠藤靖典
+\\ \hline
+英文タイトル  & On Kernel fuzzy $c$-Regression
+\\ \hline
+和文タイトル  & カーネルファジィ$c$-回帰法について
+\\ \hline
+書誌情報  &  第33回ファジィシステムシンポジウム 講演論文集(FSS 2017　山形大学), pp~325--330
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{論文の要約}
+本論文では，カーネルファジィ$c$-回帰法の提案についての説明を行っている．「はじめに」では，クラスタリング，ファジィ化の有用性について記されている．次に，既存研究として，ハード$c$-回帰，ファジィ$c$-回帰，カーネル$c$-回帰についての紹介を行っている．その後，提案手法のアルゴリズムについての説明を，既存手法と比較しながら行っている．
+その後，数値実験として，人工データと実データを用いて，ファジィ化による頑強さの変わり具合について考察を行っている．
+結論として，人工データに対しては既存手法よりも相関構造を的確に把握できており，頑強さの面でも優れていると言える．しかし，クラスタ同士の交差点を含む実データに対しては有用な結果が得られなかった．
+\section{論文のトピック}
+本論文では，カーネルファジィ$c$-回帰法の提案についての説明を行っている．既存手法としてカーネルハード$c$-回帰法があるが，ファジィ化について十分な考察がされていない．また，新規手法では，既存手法よりも柔軟に相関構造を把握できると考えられる．
+
+\section{提案手法のコア要素}
+提案手法であるカーネルファジィ$c$-回帰の目的関数を式\eqref{ksfcr}に示す．ここで，説明変数を$x_k \in \mathbb{R}^p$，被説明変数を$y_k \in \mathbb{R} (k=1,...n)$とする．また各クラスタ$C_i(i=1,...c)$にデータ$x_k$が属することを示す帰属度を$u_{ki}$とし，$U_i$はクラスタiの各
+帰属度を並べた対角行列である．$K$はカーネル関数$k(x,x')$を並べた正方行列であり，$\lambda$は正則化パラメータである．
+\begin{align}
+	J_{ksfcr}=\sum_{i=1}^{c}\left(y-K \alpha_{i}\right)^{T} U_{i}\left(y-K \alpha_{i}\right)+\frac{1}{2} \sum_{i=1}^{c} \lambda_{i} \alpha_{i}^{T} K \alpha_{i}
+	\label{ksfcr}
+\end{align}
+提案手法のアルゴリズムをここで述べる．まず，初期クラスタをランダムに生成する．ここから，ループに入り，収束していればループは終了となる．
+まず，ループ内では$u_{ki}$を式\eqref{U}を用いて更新する．そして次に，$\alpha$を式\eqref{alpha}により更新し，ここで収束していればループ終了となる．このように，$u_{ki}$と$\alpha$を繰り返し更新することで計算を行うことができる．
+
+\begin{align}
+	u_{k i}=\frac{\left(1 / D_{k i}\right)^{\frac{1}{m-1}}}{\sum_{l}^{c}\left(1 / D_{l k}\right)^{\frac{1}{m-1}}}
+	\label{U}
+\end{align}
+
+\begin{align}
+	\alpha_{i}=\left(\frac{1}{2} \lambda_{i}+U_{i} K\right)^{-1}\left(U_{i} y\right)
+	\label{alpha}
+\end{align}
+
+\section{実験デザイン・結果と考察}
+何を示すために，どのような実験を行い，どのような結果が得られたかを説明する．
+例えば，使用したデータセット，評価基準，ハイパーパラメータの設定方法について説明する．
+また，数値実験の結果から得られた考察について簡潔に述べる．
+
+データセットとして，人工データと実データを用いて数値実験を行う．人工データはノイズを含むデータと含まないデータの2種類を用いている．実データとしては，4カ国のGDPデータを用いている．これらのデータセットを用いて，カーネルハード$c$-回帰法と提案手法を比較することで，クラスタリングアルゴリズムの特徴を評価する．また，評価指標として，ARIを用いている．
+
+提案手法にはカーネルパラメータ$\gamma$と回帰パラメータ$\lambda$の2つのハイパーパラメータが必要となる．そのため，各パラメータに対するARIの挙動をプロットして図で示している．
+
+人工データにおいて，提案手法の方が，ノイズを含むデータに対するクラスタリングについて良好な結果が得られた．これは，ファジィ化することで，ノイズに対しての頑強性が増したことが要因であると考えられる．さらに，パラメータ変化した場合について，提案手法の方が安定した結果が得られることができており，頑強性が高くなっていることを意味している．しかし，実データに対しては，頑強性は低くなっている．
+\section{手法の限界・今後の課題}
+今後の課題として，ファジィ化の方法を変えた場合についての考察，非類似度の算出方法の変更が挙げられる．
+\section{特に重要な関連研究}
+参考文献\cite{ref1}は，クラスタリングにファジィの理論を導入することを提案した論文であり，重要であると言える．
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	Joseph C. Dunn : “A fuzzy relative of the ISO-DATA process and its use in detecting compact well-separated clusters.”, Jounal of Cybernetics, pp.~32-–57 (1973).
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

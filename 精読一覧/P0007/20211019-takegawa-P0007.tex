@@ -1,0 +1,153 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0007
+\\
+\hline
+日付  &  2021年10月19日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Rajesh N. Dave
+\\ \hline
+英文タイトル  & Characterization and detection of noise in clustering
+\\ \hline
+和文タイトル  & クラスタリングにおけるノイズの特性と検出
+\\ \hline
+書誌情報  &  Pattern Recognition Letters，Vol.~12，pp.~657--664，1991
+\\ \hline
+キーワード & Clustering, noise cluster, classification amon~t noisy data, K-means algorithms, fuzzy K-means algorithms
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文のトピック}
+本論文では，ノイズクラスタリングの新規手法について提案を行う．
+\section{ベースとなった手法}
+\subsection{Fuzzy $K$-means}
+Fuzzy $K$-meansについては，目的関数と制約条件を載せるだけの紹介とする．
+以下の式\eqref{function_k-means}\eqref{subject_to_k-means}はそれぞれ目的関数と制約条件である．
+ここで，データ集合を$\bm{X} = \{x_k \mid k= 1, \cdots n\}$，クラスタ数を$c$，帰属度を$\bm{U}=\{u_{ki}\mid 0 < u_{ki} < 1\}$，クラスタ中心の集合を$\bm{v}=\{v_i \mid i= 1,\cdots c \}$
+とする．ここで二乗誤差は，
+$\left(d_{i k}\right)^{2}=\left( x_{k}-v_{i}\right)^{T} A_{i}\left( x_{k}-v_{i}\right)$と表され，$\bm{A_i}$は，正定値行列である．
+\begin{align}
+	\label{function_k-means}
+	J(\bm{U}, \bm{v})=\sum_{i=1}^{c} \sum_{k=1}^{n}\left(u_{i k}\right)^{m}\left(d_{i k}\right)^{2}
+\end{align}
+\begin{align}
+	\label{subject_to_k-means}
+	\sum_{i=1}^{c}\left(u_{i k}\right)=1
+\end{align}
+しかし，既存の$K$-meansには，ノイズ値の影響を受けやすいという欠点がある．これは，式\eqref{subject_to_k-means}の制約条件が原因で，ノイズ値も無理矢理にクラスタに割り当てられるからである．
+
+\section{提案手法のコア要素}
+\subsection{ノイズクラスタリング}
+ノイズクラスタ距離$\sigma$を導入することで，$K$-meansのノイズ値の影響を受ける問題点を解決した．
+\subsection{$\sigma$の初期値の求め方 }
+本節は，自身の研究につながる最も重要な節である．ノイズクラスタ距離$\sigma$は，自身で決定する必要のあるハイパーパラメータである．適切な$\sigma$を求めるには，クラスタの分布を知る必要があり，ノイズクラスタリングの趣旨と異なる．そこで，適切な$\sigma$を求める方法として，平均点間距離から求める方法がある．平均点間距離はクラスタの構造を反映するためである．
+\begin{align}
+	\delta^{2}=\lambda\left[\frac{\sum_{i=1}^{c-1} \sum_{k=1}^{n}\left(d_{i k}\right)^{2}}{n(c-1)}\right]
+\end{align}
+
+
+
+\section{実験デザイン・結果と考察}
+人工データを基に，ノイズクラスタリングの検証実験を行った．ノイズ点がかなり多いデータで，k-meansとの比較で性能を確かめた(データの詳細については載っていない)．細長いデータに対しては適切にクラスタリングをされなかったので，Gustafson and Kessel (1979)による適応クラスタリング
+を基にクラスタリングを行った．その結果，適切なクラスタリングを行えている．
+\section{手法の限界・今後の課題}
+本論文では，k-meansを基にノイズクラスタリングを行ったが，回帰分析にも応用可能である．それは，ノイズクラスタリングの概念はあらゆる二乗誤差に適応可能であり，残差の二乗に対応できるからである．画像のエッジ処理などへの応用が考えられる．
+
+$\delta$のパラメータ値決定についても問題が残っている．本論文では，平均点間距離を基に初期値を決定した．これは，クラスタの分布が球状か楕円状かなどでうまくいくかが決まる．一つの可能性として，偏差を考慮することで，適切な$\delta$を決定できるかもしれないと示唆している．
+
+\section{特に重要な関連研究}
+ノイズクラスタリングの関連研究として以下に二つ挙げる．両者とも，手順の異なるノイズクラスタリングを行っており，私の研究に役立つものだと考える．
+
+論文\cite{ref1}は，各データ点に密度に比例した重みを加えることにより，ノイズ点を検出する手法である．つまり，重みが低いデータ点は相対的に重要度の低いと見なすことができ，重みの値によってノイズ点を検出することができる．
+
+論文\cite{ref2}は，最尤法を利用して，ランダムノイズから目的のデータを分類する手法である．この手法はノイズが多いデータの中から少数の目的データを抽出する場合に適している．
+
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	J. Jolion and A. Rosenfeld,
+	Cluster detection in background noise,
+	Pattern Recognition, Vol.~22, No.~5, pp~603--pp~607, 1988
+\bibitem{ref2}
+	I. Weiss ,Straight line fitting in a noisy image, Computer Vision and Pattern Recognition, pp.~647--pp~652, 1988
+
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

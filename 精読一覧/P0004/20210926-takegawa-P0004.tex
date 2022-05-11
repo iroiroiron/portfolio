@@ -1,0 +1,206 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0004
+\\
+\hline
+日付  &  2021年09月27日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Sadaaki Miyamoto, Youhei Kuroda, and Kenta Arai
+\\ \hline
+英文タイトル  & \begin{tabular}{l}
+Algorithms for Sequential Extraction of Clusters by Possibilistic Method and Comparison \\with Mountain Clustering
+\end{tabular}
+
+\\ \hline
+和文タイトル  & Possibilistic法によるクラスターの逐次抽出のアルゴリズムとMountain Clusteringとの比較
+\\ \hline
+書誌情報  &  \begin{tabular}{l}
+Journal of Advanced Computational Intelligence and Intelligent Informatics，\\
+Vol.12 No.5, p448-453,2008
+\end{tabular}
+\\ \hline
+キーワード & \begin{tabular}{l}
+possibilistic clustering, sequential extraction of clusters, mountain clustering
+\end{tabular}
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{論文のトピック}
+本論文では、Possibilistic法による逐次抽出法を提案を行っている。Possiblistic法は、目的関数の最適化に基づいており、二つの目的関数についての二章で説明が行われている。
+
+その後、提案手法として、三つの逐次抽出法クラスタリングを提案する。その後、mountainクラスタリングとの性能評価を行い、提案手法の重要性を確認する。
+\section{ベースとなった手法}
+\subsection{Possiblistic法クラスタリング}
+Possiblistic法クラスタリングは目的関数の最適化に基づいており、以下の2つの式(\ref{J_e},\ref{J_2})を定義する。ここで、$\lambda$,$\zeta$はハイパーパラメータでり、$u_{ki}$はメンバーシップ関数、$D_{ki}$は個人とクラスタ中心の間の標準的な二乗ユークリッド距離である。
+\begin{align}
+	\label{J_e}
+	J_{e}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left\{u_{k i} D_{k i}+\lambda^{-1} u_{k i}\left(\log u_{k i}-1\right)\right\}
+\end{align}
+\begin{align}
+	\label{J_2}
+	J_{2}(U, V)=\sum_{k=1}^{n} \sum_{i=1}^{c}\left\{\left(u_{k i}\right)^{2} D_{k i}+\zeta^{-1}\left(1-u_{k i}\right)^{2}\right\}
+\end{align}
+
+\subsection{mountainクラスタリング}
+mountainクラスタリングは、クラスターを順次、すなわち一度に1つずつ抽出するものである。特徴として、$y$は格子点に限定されることが挙げられる。
+式(\ref{mountain})は、mountainクラスタリングの更新式である。この更新式が停止するまで繰り返す。
+\begin{align}
+	\label{mountain}
+	M^{(\ell)}(y)=M(\ell-1)(y)-M\left(y^{(\ell-1)}\right) \sum_{k=1}^{n} \exp \left(-\alpha D\left(y^{(\ell-1)}, y\right)\right)
+\end{align}
+\section{提案手法のコア要素}
+\subsection{ProcedureA}
+ProcedureAの手法は以下のようになる。
+\begin{description}
+	\item[Procedure A]
+	\item[A1.] 候補点$y_1,... y_L\in R^p$を生成する。$X^{(0)}= X$と$k= 0$です。
+	\item[A2.]最小化要素を探す
+	\begin{align}
+		\bar{y}=\arg \min _{v=y_{1}, \ldots, y_{L}} J(v ; k)
+	\end{align}
+	\item[A3.]$\bar{y}$を中心としたクラスタ$G^{(k)}$を見つけ、$G^{(k)}:X^{(k+1)}=x^{(k)}-G^{(k)}$を抽出します。
+	$X^{(k+1)}$がもう一つのクラスタを抽出するのに十分な要素を持っていない場合、停止します;そうでなければ$k := k+1$でA2に進みます。
+\end{description}
+点 $y_1,...,y_L$ は、mountainクラスタリングと同様に、格子状の点で値を取るか、またはXからランダムに選ぶ。この手法は　、
+
+\subsection{ProcedureB}
+この手法は、fussy c$-$meansの手法と最適化方法が似ている。そのため、私が行う研究である、「ガウス過程に基づくc$-$回帰逐次抽出法」にも、このアルゴリズムを参考にできると考えている。
+
+\begin{description}
+	\item[Procedure B]
+	\item[B1.] 候補点$y_1,...y_L \in R^p$を初期のクラスタとして生成します。$X^{(0)}=X$ と $k=0$．
+	\item[B2.] 収束するまでukiとviの計算を繰り返します。
+	収束した点をz1,...zlとします。
+	最小化する要素を求める。
+	\begin{align}
+		\label{z}
+		\bar{z}=\arg \min _{v=z_{1}, \ldots, z_{\ell}} J(v ; k)
+	\end{align}
+	\item[B3.]中心が$\bar{z}$のクラスタ$G^{(k)}$を見つける。$G^{(k)}:X^{(k+1)}=X^{(k)}-G^{(k)}$を抽出する。
+	$X^{(k+1)}$がもう1つのクラスタを抽出するのに十分な要素を持っていない場合は停止し、そうでない場合は$k := k + 1$してB2に進みます。
+\end{description}
+
+\subsection{ProcedureC}
+generalized multi pass possibilistic medoid clusteringとも呼ばれる手法である。
+\begin{description}
+	\item[Procedure C]
+	\item[C1]候補点 $y_1,.. y_L \in X$ を生成し、$Y= {y_1,... y_L}$ から クラスタ中心の初期値$z_1,... z_c$ を選択する。$X^{(0)}= Xとk = 0$である。
+	\item[C2]収束するまでC3を繰り返す
+	\item[C3]$z_i$($i= 1,... c$)に対するK-nearest要素を$y_{i1},... y_{ki}\in Y$とする。
+	最小化要素を探す．
+	\begin{align}
+		\bar{z}_{i}=\arg \min _{v=z_{i}, y_{i 1}, \ldots, y_{k i}} J(v ; k)
+	\end{align}
+	$z_i=\bar{z_i}$とおく．
+	\item[C4]
+	\begin{align}
+		\bar{z}=\arg \min _{v=z_{i}, y_{i 1}, \ldots, y_{k i}} J(v ; k)
+	\end{align}
+\end{description}
+
+
+\section{実験デザイン・結果と考察}
+Mountainクラスタリングの比較実験として、200個の点を持つp次元のデータセットをランダムに生成した数値実験を行った。表\ref{comparison_experiment}は比較実験の結果である。表\ref{comparison_experiment}によると、Mountainクラスタリングは次元数に応じて実行時間も指数関数的に増加する。一方提案手法では実行時間の急激な増加がないことがわかった。
+\begin{table}[h]
+\label{comparison_experiment}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{l|}{Mountain} & \multicolumn{1}{l|}{Procedure A} \\ \hline
+p(次元)                           & (ms)                          & (ms)                            \\ \hline
+2                               & 24.84                         & 30.46                           \\ \hline
+3                               & 772.96                        & 35.62                           \\ \hline
+4                               & 20453.333                     & 42.03                           \\ \hline
+5                               & 485758.59                     & 60.47                           \\ \hline
+6                               & -                             & 74.68                           \\ \hline
+\end{tabular}
+\end{table}
+
+\section{手法の限界・今後の課題}
+
+\section{特に重要な関連研究}
+参考文献\cite{ref1}は、「一度に一つのクラスタ」を生成する手法について提案された論文である。ノイズクラスタリングについても述べられており、参考文献として読むべき論文であると言える。
+
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	R. N. Dave and R. Krishnapuram, “Robust clustering methods: a unified view,” IEEE Trans. Fuzzy Syst, Vol.5, No.2, pp. 270-293, 1997.
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

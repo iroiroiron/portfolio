@@ -1,0 +1,145 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0006
+\\
+\hline
+日付  &  2021年10月13日
+\\
+\hline
+名前  &  武川 海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Rajesh N. Dav\'{e} and Raghu Krishnapuram
+\\ \hline
+英文タイトル  & Robust Clustering Methods: A Unified View
+\\ \hline
+和文タイトル  & ロバストなクラスタリング手法についての統一的見解
+\\ \hline
+書誌情報  &  IEEE TRANSACTIONS ON FUZZY SYSTEMS，Vol.~5，No.~2，pp.~270--293，1997
+\\ \hline
+キーワード & Clustering validity, fuzzy clustering, robust methods.
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+ロバストなモデルとは，ノイズに影響を大きく受けないモデルのことである．実際のモデル運用には外れ値やノイズがつきまとうため，ロバストなモデルが必要となる場面は多い．
+
+本論文では，ロバストなクラスタリングの手法を多数紹介している．しかし，その手法の多くが本質的に同じであることを著者は主張している．
+%例えば，ロバストなクラスタリング手法である，Ohashiアルゴリズムとノイズクラスタリング，PCM(Possibilistic $c$-means)がある条件下で同一になることを示している．ロバスト統計学とファジィ集合理論の類似性について述べており，ロバストなクラスタリング手法と，ロバスト統計学に基づいた手法との類似性を本論文では主張している．
+
+\section{論文のトピック}
+本論文では，ロバストなクラスタリングモデルとして，ノイズクラスタリング，可能性クラスタリングを中心に取り上げている．これらのクラスタリングとOhashi-アルゴリズムやMountainアルゴリズムなどと比較している．
+ロバスト統計学についても取り上げている．ロバスト統計学とファジィクラスタリングの関連性について深く述べている．また，ほとんどのクラスタリング手法は目的関数の最小化問題に帰結するため，クラスタリングの妥当性の重要性についても述べている．
+
+\section{提案手法のコア要素}
+\subsection{ノイズクラスタリング}
+参考文献\cite{thesis:noise_param}にて，Dav\'{e}が提唱した手法である．$\delta^{2}$はノイズパラメータになっており，$d^2(\bm{x}_j,\beta_i)$と比較して，ノイズクラスタ項に属するかどうか比較する．この手法は，私自身が行っている研究の基となるため，重要な手法であると言える．
+\begin{align}
+\label{function}
+J(B, U ; X)= \sum_{i=1}^{C} \sum_{j=1}^{N}\left(u_{i j}\right)^{m} d^{2}\left(\bm{x}_{j}, \beta_{i}\right)
++\sum_{j=1}^{N} \delta^{2}\left(1-\sum_{i=1}^{C} u_{i j}\right)^{m}
+\end{align}
+式\label{function}を$u_{ij}$について微分を行うと，以下の式が得られる．
+\begin{align}
+	\label{U}
+	u_{i j}=\frac{1}{\sum_{k=1}^{C}\left[\frac{d^{2}\left(\boldsymbol{x}_{j}, \beta_{i}\right)}{d^{2}\left(\boldsymbol{x}_{j}, \beta_{k}\right)}\right]^{1 /(m-1)}}+\left[\frac{d^{2}\left(\boldsymbol{x}_{j}, \beta_{i}\right)}{\delta^{2}}\right]^{1 /(m-1)}
+\end{align}
+
+式\eqref{U}は，$u_{ij}$について解いた結果である．ここで，式\eqref{U}の分母の第2項について，ノイズパラメータが含まれているのがわかる．つまり，大きいノイズパラメータを与えた場合，$u_{ij}$が大きくなり，帰属している度合いが小さくなることがわかる．
+\subsection{可能性クラスタリング}
+
+\begin{align}
+	u_{i j}=\frac{1}{\sum_{k=1}^{C}\left[\frac{d^{2}\left(\boldsymbol{x}_{j}, \beta_{i}\right)}{d^{2}\left(\boldsymbol{x}_{j}, \beta_{k}\right)}\right]^{1 /(m-1)}+\left[\frac{d^{2}\left(\boldsymbol{x}_{j}, \beta_{i}\right)}{\delta^{2}}\right]^{1 /(m-1)}}
+\end{align}
+
+
+\section{実験デザイン・結果と考察}
+
+
+\section{手法の限界・今後の課題}
+データのノイズとクラスタ数が不明な場合，クラスタリングを困難である．本論文で紹介した手法は，ノイズをクラスタリングできる手法であるが，クラスタ数が未知の場合は，信頼性の高いクラスタリングを行うことは難しい．そのため，クラスタ数の代わりとなるパラメータを網羅的に与えてあげる必要がある．例えば，ノイズクラスタリングでは，クラスタ数の代わりに，ノイズパラメータ$\sigma^2$を採用しており，クラスタ数の問題に置き換えたものになっている．しかし，最適化の手法や妥当性基準が変わるため，意味のあるものであると言える．
+
+最後に，本論文では，さまざまなクラスタリング手法を，ロバスト性の観点から考察し，いくつかの手法は等価であると主張した．そのため，研究者が車輪を再発明しないようにするように注意する必要がある．
+\section{特に重要な関連研究}
+参考文献\cite{thesis:noise_param}は，ノイズクラスタリングの手法について提唱した論文である．本論文でも解説がなされていたが，ノイズパラメータに関する細かい考察がされているため，重要な論文であると言える．
+
+\begin{thebibliography}{99}
+%
+
+\bibitem{thesis:noise_param}
+R. N.~Dav\'{e}, Characterization and detection of noise in clustering, \textit{Pattern Recognition Letters}, Vol.~12, No.~11, pp.~657--664, 1991
+
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

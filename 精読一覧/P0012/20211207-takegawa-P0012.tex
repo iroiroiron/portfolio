@@ -1,0 +1,129 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0012
+\\
+\hline
+日付  &  2021年12月07日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  T.~Chai and R.~R.~DraxIer
+\\ \hline
+英文タイトル  &
+\begin{tabular}{l}
+
+Root mean square error (RMSE) or mean absolute error (MAE)?\\ – Arguments against avoiding RMSE in the literature
+
+\end{tabular}
+
+\\ \hline
+和文タイトル  &
+
+\begin{tabular}{l}
+	二乗平均平方根誤差（RMSE）か平均絶対誤差（MAE）か？\\
+	- RMSEを避けることに対する文献上の議論
+\end{tabular}
+\\ \hline
+書誌情報 & Geoscientific Model Development，pp.~1247--1250，2014
+\\ \hline
+キーワード &
+なし．
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{論文の要約}
+RMSEとMAEは誤差情報を基に，モデル評価の指標によく使われる．本論文では，RMSEとMAEの指標の違いについて論じている．先に結論として，どちらが優れているというものではない．RMSEとMAE複数の測定基準を組み合わせることが必要な場合があります。
+
+\section{ベースとなった手法}
+以下の式は，MAE，RMSEの定義式である．2式の明確な違いは，絶対誤差か二乗誤差かである．MAEは絶対誤差を扱うのだが，これは最適化の際に問題が起こりやすい．一般に二乗数の方が最適化が容易であり，最適化の面ではRMSEの方が有用である．
+
+\begin{align}
+	\mathrm{MAE}=\frac{1}{n} \sum_{i=1}^{n}\left|e_{i}\right|
+\end{align}
+
+\begin{align}
+	\mathrm{RMSE}=\sqrt{\frac{1}{n} \sum_{i=1}^{n} e_{i}^{2}}
+\end{align}
+\section{実験デザイン・結果と考察}
+RMSEとMAEの性能を比較するために，ランダムに生成したデータを基に実験を行っている．データ数nを$4,10,100,...,1000000$まで試した結果を，表としてまとめている．RMSEでは，nが100以上になると誤差分布が5\%以内になるため，「正確な解」に収束している．逆にデータ数が100未満の場合，RMSEの誤差が大きく，信頼性が低いと言える．そのため，データ数さえ多ければ信頼性の高い結果を得ることができる．
+
+一方，MAEの場合は，データ数を増やした場合，0.8に収束している．やはり，MAEの場合もデータ数の量によって信頼性が変わることを本論文では述べている．
+
+しかし，これらのランダムデータは，仮定したガウス分布から生成したものである．RMSEは，二乗誤差を扱うため，極端に外れた値が含まれている場合，過度に反応してしまい，ロバスト性に欠ける．一方，MAEは絶対誤差を扱うため，全てのデータについて平等な影響を受ける．そのため，ロバスト性という面では優れていると言える．しかし，RMSEはMAEと異なり，データごとに「重み」づけすることでモデル性能指標に違いをつけることができる面で，有用であると言える．
+
+これらの議論から，RMSEとMAEのどちらが優れているということはない．そのため，RMSEとMAEを含めたさまざまな評価指標が今後登場することが期待される．
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

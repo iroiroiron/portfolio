@@ -1,0 +1,172 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0003
+\\
+\hline
+日付  &  2021年09月24日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Richard J. Hathaway and James C. Bezdek
+\\ \hline
+英文タイトル  & Switching Regression Models and Fuzzy Clustering
+\\ \hline
+和文タイトル  & スイッチング回帰モデルとファジー・クラスタリング
+\\ \hline
+書誌情報  &  IEEE TRANSACTIONS ON FUZZY SYSTEMS, VOL.1, NO.3,pp195-204 AUGUST 1993
+\\ \hline
+キーワード &
+\begin{tabular}{l}
+	EM algorithm,FCRM algorithm,fuzzy cluster- ing,  fuzzy sets, mixture distributions,\\regression models, switching regression.
+\end{tabular}
+
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文では、スイッチング回帰をベースとしたファジィクラスタリング手法の提案を行っている。提案手法では、ファジィ分類のための帰属度の定義がテーマとなっている。
+また、実験として、既存手法である混合ガウスモデルでの分類との比較も行っている。基本的には混合ガウスモデルと同じ結果になったが、提案手法では帰属度の初期値によってばらつきがあることを述べている。
+そのため、課題としては、最適な初期値を見つけることが挙げられると言える。
+
+\section{論文のトピック}
+スイッチング回帰をベースとしたファジィクラスタリング手法の提案を行っている。
+
+\section{ベースとなった手法}
+\subsection{スイッチング回帰}
+スイッチング回帰とは、複数の回帰式を推定する手法である。提案手法であるfussy $c$-regressionでは、複数の回帰式を基にクラスタリングを行う。回帰式は以下の式(\ref{switching})になる。
+\begin{align}
+	\label{switching}
+	\mathbf{y}=\mathbf{f}_{i}\left(\mathbf{x} ; \beta_{i}\right)+\varepsilon_{i}
+\end{align}
+\subsection{帰属度の定義}
+本論文では帰属度の定義についても詳細に述べている。式(\ref{non-constarained})が最も制約条件がゆるい帰属度となる。$u_i$が0から1までの値をとることを意味している。
+
+これに、列和が$1$であることを制約に加えたものが、式(\ref{constarained})である。
+
+さらに式(\ref{constarained})に、制約条件を加えたものが式(\ref{clisp})である。これは、ハードな制約条件で、$u_i$は0か1の二値のみをとる。
+\begin{align}
+	\label{non-constarained}
+	E_{f c u}=\left\{\mathbf{u} \in \mathcal{R}^{c} \mid u_{i} \in[0,1] \forall i\right\}
+\end{align}
+
+\begin{align}
+	\label{constarained}
+	E_{f c}=\left\{\mathbf{u} \in E_{f c u} \mid \sum_{i=1}^{c} u_{i}=1\right\}
+\end{align}
+
+\begin{align}
+	\label{clisp}
+	E_{c}=\left\{\mathbf{u} \in E_{f c} \mid u_{i} \in\{0,1\} \forall i\right\}
+\end{align}
+
+
+\section{提案手法のコア要素}
+提案手法では、ファジィ$c$-回帰クラスタリングを行う。そのため、帰属度の制約式として、式(\ref{constarained})を利用する。帰属度を考慮した目的関数は以下の式(\ref{minimize})(\ref{subject})のようになる。
+\begin{align}
+	\label{minimize}
+	\sum_{k=1}^{n} \sum_{i=1}^{n} U_{i k}^{m} E_{i k}\left(\beta_{i}\right)
+\end{align}
+
+\begin{align}
+	\label{subject}
+	\sum_{i=1}^{c} u_{k i}=1
+\end{align}
+式(\ref{minimize})(\ref{subject})に対して、$U$と$\beta$に対して交互最適化を行う。$U$と$\beta$に対する式は式(\ref{Bi})(\ref{Uik})になる。
+\begin{align}
+	\label{Bi}
+	\boldsymbol{\beta}_{i}=\left[\boldsymbol{X}^{T} \boldsymbol{D}_{i} \boldsymbol{X}\right]^{-1} \boldsymbol{X}^{T} \boldsymbol{D}_{i} \boldsymbol{Y}
+\end{align}
+
+\begin{align}
+	\label{Uik}
+	U_{i k}=\frac{1}{\sum_{j=1}^{c}\left(\frac{E_{i k}}{E_{i k}}\right)^{\frac{1}{m-1}}}
+\end{align}
+\section{実験デザイン・結果と考察}
+EMアルゴリズムと比較して実験を行っている。基本的にはEMアルゴリズムを使った場合と似たような結果になった。しかし、提案手法は初期値に分類結果が依存する場合があった。
+\section{手法の限界・今後の課題}
+本論文のconclusionにて、パラメータへの効率的な選択方法、非線形なデータへの対応、交互最適化の手法選択、クラスタ数の決定方法、帰属度に制約がない場合の手法について述べられている。
+\section{特に重要な関連研究}
+本論文では、混合ガウス分布を利用したクラスタリングと比較がなされている。混合ガウス分布に関する研究が参考文献[\cite{EM}]である。
+
+\begin{thebibliography}{99}
+%
+\bibitem{EM}
+M. Aitkin and G. T. Wilson, Mixture models, outliers, and the EM algorithm, Technometric,vol. 22, no. 3, pp. 325-331, 1980]
+
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

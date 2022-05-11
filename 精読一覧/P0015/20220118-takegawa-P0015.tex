@@ -1,0 +1,151 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0015
+\\
+\hline
+日付  &  2021年01月18日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  & C. K. I. Williams, C. E.Rasmussen
+\\ \hline
+英文タイトル  & Gaussian Processes for Regression
+\\ \hline
+和文タイトル  & 回帰のためのガウス過程
+\\ \hline
+書誌情報  &  Advances in Neural Information Processing Systems 8 (NIPS 1995), pp.~514--520，1995
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文は，回帰問題に対して，パラメトリックに指定されたガウス過程を使用する手法について提案する．ベースとなる知識としてガウス過程の考えがある．確率過程を関数ごとに与えることで，平均と共分散行列によってガウス分布が得られる．この分布により，関数の予測分布を得る手法がガウス過程の考え方である．この手法を回帰手法に応用することで，今まで回帰のタスクに対して，より幅広い解決案を考えることができる．
+この手法は，分類などの応用にも検討されており，あらゆるタスクに対して可能性を考えられる手法と言える．
+
+\section{提案手法のコア要素}
+\subsection{共分散関数の定式化}
+本論文の提案手法として，共分散関数の定式化がある．式\eqref{eq1}が，その共分散関数の式である．
+	\begin{align}
+		\label{eq1}
+		\begin{aligned}
+		C\left(\boldsymbol{x}^{(i)}, \boldsymbol{x}^{(j)}\right)= v_{0} \exp \left\{-\frac{1}{2} \sum_{l=1}^{d} w_{l}\left(x_{l}^{(i)}-x_{l}^{(j)}\right)^{2}\right\}
+		+a_{0}+a_{1} \sum_{l=1}^{d} x_{l}^{(i)} x_{l}^{(j)}+v_{1} \delta(i, j)
+\end{aligned}
+	\end{align}
+	ここで，ハイパーパラメータとして，$\bm{\theta}=\log \left(v_0,v_1,w_1,\cdots,w_d,a_0.a_1\right)$を与える．後に，最尤推定を行うため，計算の都合上，対数で表記する．
+	第1項は，近接した入力を持つ場合，相関の高い出力がされるようにモデルしている．また，$v_0$は関数全体のスケールを，$\bm{w}$は，各入力次元に関しての距離を考慮するために設定している．
+	次に，第2項は，線形回帰のための項となっている．$a_0$，$a_1$はそれぞれ線形回帰線のためのパラメータである．
+	最後に，第3項はノイズを考慮するための項となっている．
+
+	このように，$d+4$個と，かなり多いハイパーパラメータを持つが，これらの全ては最尤推定やモンテカルロ法によって求めることが出来る．
+	尤度について，以下の式\eqref{eq2}に示す．
+	\begin{align}
+		\label{eq2}
+l=-\frac{1}{2} \log \operatorname{det} K-\frac{1}{2} \boldsymbol{t}^{T} K^{-1} \boldsymbol{t}-\frac{n}{2} \log 2 \pi
+\end{align}
+
+\subsection{パラメータの推定方法}
+本論文では，これらのハイパーパラメータを求める手法として，二つ紹介している．
+\subsubsection{最尤推定}
+式\eqref{eq2}を最大化するように偏微分を行うことで，ハイパーパラメータを決定する．具体的な手法として，共役勾配法などの手法がある．
+\subsubsection{モンテカルロ法との統合(HMC)}
+ガウス過程において，データ$D$から事後分布$P(\theta \mid D)$を積分することで，求めたい平均や共分散を求めることができる．ここで，事前分布を$P(\theta)$とする．この式\eqref{eq3}を以下に示す．
+\begin{align}
+	\label{eq3}
+	\bar{y}(\boldsymbol{x})=\int \hat{y}_{\boldsymbol{\theta}}(\boldsymbol{x}) P(\boldsymbol{\theta} \mid D) d \boldsymbol{\theta}
+\end{align}
+
+しかし，この式を普通に解くことはできない．そこで，マルコフ連鎖モンテカルロ法を用いることで，解くことができる．
+\section{手法の限界・今後の課題}
+回帰タスクだけでなく，分類のタスクへの応用も検討されている．
+\section{特に重要な関連研究}
+参考文献\cite{ref1}は，自動関連性判断法(ARD)と呼ばれる手法について提唱した論文であり，重要なパラメータについて順位づけすることで，無関係な入力に対して無視することを考案した手法のことである．本論文における共分散関数に関連しており，重要であると言える．
+
+次に，参考文献\cite{ref2}は，モンテカルロ法について解説した論文である．本論文においても解説が行われていたが，物理の話が中心で，理解したとは言い難い．そのため，参考文献\cite{ref2}を通じて理解することが重要であると言える．
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+
+David J.C. MacKay, BAYESIAN NON-LINEAR MODELING FOR THE PREDICTION COMPETITION, 1993
+
+\bibitem{ref2}
+David J.C. MacKay, INTRODUCTION TO MONTE CARLO METHODS
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

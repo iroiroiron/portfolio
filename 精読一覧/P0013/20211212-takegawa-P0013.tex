@@ -1,0 +1,148 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0001
+\\
+\hline
+日付  &  YYYY年MM月NN日
+\\
+\hline
+名前  &  情報太郎
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  春山秀幸, 遠藤靖典, 大久保貴義
+\\ \hline
+英文タイトル  &
+\\ \hline
+和文タイトル  & カーネル関数を用いた階層的クラスタリング
+\\ \hline
+書誌情報  &  知能と情報（日本知能情報ファジィ学会誌），Vol.~17，No.~4，pp.~459--467，2005
+\\ \hline
+キーワード & 階層的クラスタリング，カーネル関数，パターン認識
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文では，階層型クラスタリングに対して，カーネル関数を導入する手法を提案を行っている．結果として，非線形なデータ構造を持つクラスタ構造に対して，有効にクラスタリングを行うことができるようになった．既存の階層型クラスタリング手法と，非階層型クラスタリング手法を比較し，人工データと実データを用いて実験を行った．
+
+\section{ベースとなった手法}
+\subsection{階層型クラスタリング}
+階層型クラスタリングにおけるクラスタリングの流れは，各データ間に非類似度を定義し，この非類似度に基づいてクラスタを逐次結合していくというものである．ここで，階層的クラスタリングには階層併合的方法と階層分割的方法があるが，本論文では階層併合的方法を用いる．以下にアルゴリズムを記す．
+
+
+\textbf{AHCアルゴリズム}　データの集合を$X = {x_1,...x_n}$，非類似度を$d(x,y)$とする
+
+\textbf{STEP1}　初期設定として，n個のデータをn個のクラスタとする．
+	\begin{align}
+		&G_{i}:=\left\{x_{i}\right\} \\
+		&d\left(G_{i}, G_{j}\right):=d\left(x_{i}, x_{j}\right) \quad(i, j=1, \ldots, n)
+	\end{align}
+
+\textbf{STEP2}　クラスタ間の非類似度行列$D = d[d_{ij}]$を更新する．
+
+\textbf{STEP3}　$D$を参照し，最も類似性の高い2つのクラスタを結合して一つのクラスタを生成する．
+		\begin{align}
+		&s\left(G_{q}, G_{r}\right)=\max _{i, j} s\left(G_{i}, G_{j}\right) \\
+		&d\left(G_{q}, G_{r}\right)=\min _{i, j} d\left(G_{i}, G_{j}\right)
+		\end{align}
+
+\textbf{STEP4}　クラスタ数が1なら終了．そうでないなら．\textbf{STEP2}に戻る．
+
+\section{提案手法のコア要素}
+本論文の提案手法は，階層併合的手法にカーネル関数を適応した，K-AHC(Kernel-aggolomerative hierarchical clustering)の提案を行っている．
+\subsection{K-AHCクラスタリングアルゴリズム}
+K-AHCにおいて非類似度$d_{\phi} (x,y) = d\left(\phi(x),\phi(y)\right)$は特徴空間における距離の自乗$\| \phi(x) - \phi(y)\|^2$とする．特徴空間での$x_i$と$x_j$との距離の自乗を，カーネル関数を用いることで$\phi$の形が分からなくても計算することができる．あとは，既存のアルゴリズムにこの非類似度を導入すれば良い．
+\section{実験デザイン・結果と考察}
+実験では、人工データと Iris データを用いている．提案手法であるK-AHCとの比較として、カーネル関数を用いない
+従来の階層型クラスタリングと非階層型クラスタリングを使用した。非階層型クラスタリングとしてファジィc-平均法
+を用いた。階層型クラスタリングとして、最短距離法、最長距離法、群間平均法、群内平均法、重心法、Ward 法を用い
+た。また、カーネル関数として多項式カーネル、ガウス型カーネル、パーセプトロンカーネル、シグモイドカーネルを用
+いた。
+データによっては、従来の手法より良好な分類結果が得られた。また、特定のデータに対して有効なカー
+ネルを確認できた。
+
+階層型クラスタリングとカーネル関数に相性があると考えらる．具体的には，内積を扱うカーネル関数か，ノルムを扱うカーネルかどうかである．実験では，Ward法とノルムを扱うガウス型カーネルと相性が良かった．Ward法はクラスタ間やクラスタ内の類似度を計算するため，ガウス型カーネルは原点の影響を受けないことが理由として考えられる．
+\section{手法の限界・今後の課題}
+これはカーネル法の課題と言えるのだが，高次元空間でデータがどのように分割しているかを把握することが困難な問題がある．これは写像関数$phi$がように現れないためであり，高次元の分布状況を把握することは今後の課題となる．
+\section{特に重要な関連研究}
+
+参考文献\cite{ref1}は，ファジィ理論が初めて提唱された論文であり，学術的にも価値のある論文である．今後，GPSCRMのファジィ化を進めるにあたって，読むべきである論文であると言える．
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	L. A. Zadeh, Fuzzy sets, \textit{Information and Control}, vol.~8, pp.~338--pp.~353, 1965
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

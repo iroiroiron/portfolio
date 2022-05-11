@@ -1,0 +1,159 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0001
+\\
+\hline
+日付  &  2021年9月21日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  中森義輝
+\\ \hline
+英文タイトル  & なし
+\\ \hline
+和文タイトル  & ファジィクラスタリングと回帰分析
+\\ \hline
+書誌情報  &  日本ファジィ学会誌，Vol.~8，No.~3，pp.~431-pp~439，1996
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+\section{論文の要約}
+
+回帰分析を用いたクラスタリング手法として，Fuzzy $c$−Regression Models(FCRM)\cite{ref1}がある．FCRMでは，ノイズ点とみなせるほど遠くにあるデータもクラスタに含めるため，現実的でない結果になる場合がある．ノイズ点に弱い問題点を解決するために，Daveの手法\cite{ref2}をFCRMに組み込む事で解決を図った，新しいモデルを提案した．提案手法では，初期クラスタ数が変化した場合にも，クラスタの形状に適応してうまくクラスタリングできることを実験で確かめた．
+
+\section{論文のトピック}
+本論文では，FCRMと適応型クラスタリングの考え方が重要となる．
+
+\section{ベースとなった手法}
+
+\subsection{Fuzzy $c$-Regression Models}
+FCRMとはデータの分類と回帰モデル群の構築を同時に行う方法である．
+与えられたデータを用いて，c個のモデルを考える．以下の式から導出され，この式から，$U$と$\bm{\beta}$の交互最適化によってクラスタリングを行う手法である．
+\begin{align}
+	\label{conditional_probability}
+	J\left(U, \boldsymbol{\beta}_{1}, \cdots, \boldsymbol{\beta}_{c}\right)=\sum_{k=1 i=1}^{n} \sum_{i=1}^{c}\left(u_{i k}\right)^{m} E_{i k}\left(\boldsymbol{\beta}_{i}\right)
+\end{align}
+
+FCRMはクラスタ中心としていくつかの回帰超平面を仮定して．データとクラスタとの距離を回帰残差を用いて定義している．このために，遠く離れた複数のデータが1つのクラスタに属すことがある．これを解決するために，クラスタの形状を考慮し，適切なクラスタ数を与えてあげることが肝要である．
+
+\subsection{適応型クラスタリング}
+適応型クラスタリングとは，クラスタの形状を動的に変更する手法である。
+ここで，$G_{ik}$がデータとクラスタのファジィ重心$v_i$との2乗距離であるのに対し，$V_{ik}$はデータと線形多様体との2乗距離である．$\alpha_{i}$は，ファジィ散布行列の固有値から求める．$\alpha_{i}$は，$G_{ik}$と$V_{ik}$の比率を定めており，各ラウンドごとに$\alpha_{i}$を更新することで，動的にクラスタの形状を読み込んだクラスタリングを行うことができる．
+以下の式は適応型クラスタリングの評価規範である。
+\begin{align}
+	J_{a f c}=\sum_{k=1}^{n} \sum_{i=1}^{c}\left(u_{i k}\right)^{m} Z_{i k}
+\end{align}
+\begin{align}
+	Z_{i k}=\left(1-\alpha_{i}\right) G_{i k}+\alpha_{i} V_{i k}
+\end{align}
+この手法の利点として，あらかじめクラスタの形状に関する仮定をおかなくてよく，異なる形状のクラスタが存在するときでもうまくいく．
+\section{提案手法のコア要素}
+提案手法は，FCRMと適応型クラスタリングを組み合わせた手法である．
+
+\begin{align}
+	\begin{aligned}
+J\left(U ; A_{1}, \cdots, A_{c} ; \bar{z}_{1}, \cdots, \bar{z}_{c}\right)=\sum_{i=1}^{c} \sum_{k=1}^{n}\left(u_{i k}\right)^{m} E_{i k}\left(A_{i}, \bar{z}_{i}\right)
+\end{aligned}
+\end{align}
+
+\begin{align}
+\begin{aligned}
+E_{i k}\left(A_{i}, \overline{\bm{z}}_{i}\right)=\alpha_{i} \times\left(\bm{y}_{k}-\bm{x}_{k}^{o} A_{i}\right)\left(\bm{y}_{k}-\bm{x}_{k}^{o} A_{i}\right)^{T}
++\left(1-\alpha_{i}\right) \times \eta \times\left(\bm{z}_{k}-\overline{\bm{z}}_{i}\right)\left(\bm{z}_{k}-\overline{\bm{z}}_{i}\right)^{\top}
+\end{aligned}
+\end{align}
+
+\section{実験デザイン・結果と考察}
+実験では，クラスタ数を増やしても，クラスタの形状に適応してクラスタリングを行えることを確かめている．
+\section{手法の限界・今後の課題}
+手法の限界として，クラスタ数の決定については決定が困難なことが多い．また．説明変数の選択に関しても問題が多い．
+\section{特に重要な関連研究}
+参考文献\cite{ref1}は、c$-$回帰に関する論文であり，本論文の主題となる論文である．
+
+また，参考文献\cite{ref2}は，適応型クラスタリングの手法について提唱した論文である．
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+	R. J. Hathaway and J. C. Bezdek, Switching Regression Models and Fuzzy Clustering, IEEE Trans on Fuzzy System Vol.~1, No.~3, pp.~195--pp.~204, 1993
+\bibitem{ref2}
+	R. N. Dave, An adaptive fuzzy $c$-elliptotype clustering algorithm, Quater Century of  Fuzziness, Vol.~I, pp~9--pp~12, 1990
+%
+
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

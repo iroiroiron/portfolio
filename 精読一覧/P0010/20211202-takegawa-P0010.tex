@@ -1,0 +1,145 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0010
+\\
+\hline
+日付  &  2021年12月02日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Yukihiro Hamasuna, Yasunori Endo
+\\ \hline
+英文タイトル  & On Kernelized Sequential Hard Clustering
+\\ \hline
+和文タイトル  & 逐次抽出型ハードクラスタリングのカーネル化
+\\ \hline
+書誌情報  &  Joint 8th International Conference on Soft Computing and ,pp.~416--419（ページ），2016
+\\ \hline
+キーワード & sequential cluster extraction, sequential hard c- means, noise clustering, kernel function.
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文は，逐次抽出法をカーネル法に組み込んだ手法について述べた論文である．カーネル$c$-meansを基にして，逐次抽出法への拡張を検討している．実験としては，非線形なデータセットに対して有効なクラスタリングが行えるかを確かめている．しかし，実験結果は否定的なものであり，非線形なデータ群に対しては有効なクラスタリング結果を得ることができなかった．
+今後の課題としては，他のカーネル関数やハイパーパラメータを広く実験することが必要であると述べられている．
+
+\section{論文のトピック}
+本論文では，逐次抽出法をカーネル法を用いたクラスタリングに導入することを目的としている．ここでは，カーネル$c$-meansを対象として実験を行っている．
+
+\section{ベースとなった手法}
+\subsection{逐次抽出型$c$-means(Sequential Hard $c$-Means; SHCM)}
+ハード$c$-meansに逐次抽出型を拡張した数式が以下の式\eqref{SHCM}であり，制約条件は，式\eqref{string}である．$D>0$はノイズパラメータであり，自分で与える必要がある．ここで，$u_{k 1}$は抽出クラスタに属する帰属度，$u_{k_0}$はノイズクラスタに属する帰属度を表している．データ点とクラスタ中心のノルム2乗値と$D$を比較して，どのクラスタに含まれるか判断する．
+\begin{align}
+	J_{s h}(U, V)=\sum_{k=1}^{n} u_{k 1}\left\|x_{k}-v_{1}\right\|^{2}+\sum_{k=1}^{n} u_{k 0} D
+	\label{SHCM}
+\end{align}
+
+\begin{align}
+		\mathcal{U}_{s h}=\left\{\left(u_{k i}\right): u_{k i} \in\{0,1\}, \sum_{i=0}^{1} u_{k i}=1,{ }^{\forall} k\right\}
+		\label{string}
+\end{align}
+
+\subsection{$\nu$-逐次抽出型$c$-means($\nu$-Sequential Hard $c$-Means; $\nu$SHCM)}
+SHCMにおける$D$の定義を変えた手法で，いわばSHCMの亜種と言える手法である．ここで，$nu$はノイズクラスタの個数を表している．つまり，自分でノイズクラスタの個数をハイパーパラメータとして与える必要がある．そのため，この手法はクラスタの構造を考慮することができず，非線形なデータ構造などには適していない．
+
+\begin{align}
+	J_{\nu s h}(U, V, D)=\sum_{k=1}^{n} u_{k 1}\left\|x_{k}-v_{1}\right\|^{2}+\sum_{k=1}^{n} u_{k 0} D-\nu D
+	\label{nuSHCM}
+\end{align}
+
+\section{提案手法のコア要素}
+SHCMに対して，カーネル法を導入した手法である．ここで，カーネル法を導入することで，非線形データに対してのクラスタリングを行うことを目的とする．
+\begin{align}
+	J_{k s h}(U, W)=\sum_{k=1}^{n} u_{k 1}\left\|\phi\left(x_{k}\right)-W_{1}\right\|^{2}+\sum_{k=1}^{n} u_{k 0} D
+\end{align}
+
+\section{実験デザイン・結果と考察}
+KSHCMの性能を評価するために，非線形なクラスタ構造を持つ，データ数150個，クラスタ数2の人工データを用いて評価を行った．ハイパーパラメータ$D,\beta$を３つの組み合わせで図にプロットしている．しかし，結果は否定的なものであり，非線形な構造を抽出することはできなかった．考察として，適切なカーネル関数やハイパーパラメータを広く実験することが必要であると述べている．ここで，興味深いのは，カーネル主成分分析を用いたクラスタ構造の可視化について必要であると述べていることである．この考えを自分の研究に組み込んでいくつもりである．
+
+\section{手法の限界・今後の課題}
+この論文で提示された実験だけでは，手法について良好な結果が得られなかった．今後，良好な結果を出すためには，他のカーネル関数やハイパーパラメータで実験することが必要であると考える．また，主成分分析を用いたクラスタ構造決定も今後研究の材料になる．
+\section{特に重要な関連研究}
+
+
+\begin{thebibliography}{99}
+%
+\cite{ref1}の論文は，カーネル法を導入することによって，線形分離可能性が高まることで，関連するデータ群が単純化されるという仕組みを扱っている．これにより，クラスタ数を推定することを目的とした論文である．
+\bibitem{ref1}
+	Girolami M., Mercer kernel-based clustering in feature space, IEEE Transactions Neural networks, Vol.~13, No.~3, pp.~780–-pp.~784, ~2002.
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

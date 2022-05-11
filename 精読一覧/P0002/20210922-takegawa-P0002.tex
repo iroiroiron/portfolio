@@ -1,0 +1,140 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0002
+\\
+\hline
+日付  &  2022年09月22日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Chung-Chun Kung , Hong-Chi Ku and Jui-Yiao Su
+\\ \hline
+英文タイトル  & Possibilistic c$-$Regression Models Clustering Algorithm
+\\ \hline
+和文タイトル  & 可能性c$-$回帰クラスタリングアルゴリズムモデル
+\\ \hline
+書誌情報  & International Conference on System Science and Engineering (ICSSE),  pp. 297-302,2013
+\\ \hline
+キーワード & fuzzy clustering, possibilistic c-means (PCM), fuzzy c-regression models (FCRM).
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文のトピック}
+本論文では、Fussy c$-$regression Model(FCRM)の手法に、Possibilistic C$-$means(PCM)の手法を加えた手法を提唱している。まず、FCRMの利点をFussy c$-$means(FCM)と比較して説明している。FCMでは、クラスタの形状が超球面状になるのが特徴である。FCMに対し、FCRMは超平面状にクラスタ分割するため、捉えられるクラスタの特徴がFCMと異なるという特徴がある。
+
+また、FCRMでは、制約条件として、ファジィ分割行列の列和が1に等しいため，各クラスタの結果はノイズデータに敏感である。この問題を解決した手法がPCMである。PCMでは、制約条件を緩和することで、各クラスタがノイズの多いデータを効果的に緩和することに成功した。
+
+そのため、FCRMにPCMの手法を加えた場合、超平面状の特徴を捉えながら、ノイズデータに強いモデルを構築することができる。
+
+\section{ベースとなった手法}
+FCRMとPCMの手法がベースとなる。ここでは、二つの手法の決定的に異なる点として、メンバーシップ変数について着目して説明を行う。
+\subsection{Fussy c$-$regression Model}
+FCRMはクラスタ中心としていくつかの回帰超平面を仮定して、データとクラスタとの距離を回帰残差を用いる手法である。式(\ref{FCRM})のように、FCRMではファジィ変数の列和が1になるようにメンバーシップ変数を定義する。
+
+\begin{align}
+	f_{i j} \in[0,1] \text { for all } i \in\{1, \cdots, c\} \text { and } j \in\{1, \cdots, L\}
+\end{align}
+\begin{align}
+	0<\sum_{j=1}^{L} f_{i j}<L \text { for all } i \in\{1, \cdots, c\}, \text { and }
+\end{align}
+\begin{align}
+	\label{FCRM}
+	\sum_{i=1}^{c} f_{i j}=1 \text { for all } j \in\{1, \cdots, L\}
+\end{align}
+\section{提案手法のコア要素}
+\subsection{Possibilistic c$-$regression Model}
+FCRMモデルの考え方に、ファジィ変数の列和制約を緩和したものが提案手法である。式(1-2)と　式(4-5)についてはFCRMの定義と同じだが、式(\ref{FCRM})と式\ref{PCRM}を比較すると定義が変わっているのがわかる。式(\ref{FCRM})については、それぞれの列の和が1になるように制約を加えていた。しかし、式(\ref{PCRM})では、全てのファジィ変数が正であれば良いというゆるい制約に変わっている。
+
+この制約によって、必ずしも合計が1になるように帰属している必要がないので、ノイズ値についての影響を受けることが少なくなることがわかる。
+\begin{align}
+	p_{i j} \in[0,1] \text { for all } i \in\{1, \cdots, c\} \text { and } j \in\{1, \cdots, L\}
+\end{align}
+\begin{align}
+	0<\sum_{j=1}^{L} p_{i j}<L \text { for all } j \in\{1, \cdots, L\}, \text { and }
+\end{align}
+\begin{align}
+	\label{PCRM}
+	\max _{i} p_{i j}>0 \text { for all } j \in\{1, \cdots, L\}
+\end{align}
+\section{実験デザイン・結果と考察}
+本論文では、簡単な連立方程式の例を三つ挙げ、　既存のFCRMアルゴリズムと提案手法であるPCRMアルゴリズムと比較することで実験を行っている。
+実験結果によると、FCRMアルゴリズムはノイズの多いデータに対して敏感であるが，PCRMアルゴリズムはノイズの多いデータを効果的に軽減できることがわかる．
+
+\section{手法の限界・今後の課題}
+本論文では、提案手法であるPCRMとFCRMを比較して述べており、他の手法とも比較して実験することが課題であると考えた。また、本論文には手法の問題点などは述べてはいなかったが、c$-$の課題である、回帰クラスタ数の設定やメンバーシップ変数の初期値の問題などは解決していないように思える。
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}

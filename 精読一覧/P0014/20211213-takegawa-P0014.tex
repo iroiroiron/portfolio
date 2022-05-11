@@ -1,0 +1,141 @@
+%フォーマット更新日：20210728
+%
+%
+
+\documentclass[10pt,onecolumn]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{otf}
+\usepackage{here}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\renewcommand{\refname}{次に読むべき論文のリスト}
+
+
+\newcommand{\hama}{\ajMayuHama}
+
+
+\pagestyle{empty}
+
+\setlength{\topmargin}{6mm}
+\setlength{\oddsidemargin}{-4mm}
+\setlength{\evensidemargin}{-4mm}
+\setlength{\textwidth}{175mm}
+\setlength{\headsep}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\textheight}{235mm}
+\setlength{\columnsep}{5mm}
+
+\begin{document}
+
+%\twocolumn[%
+\vspace{-20mm}
+\begin{center}
+{\LARGE\textbf{論文メモ}}
+\end{center}
+
+\begin{flushright}
+\begin{tabular}{|c|l|}
+%\hline
+%版数  &   0001からはじめる
+%\\
+\hline
+文献番号  &  0014
+\\
+\hline
+日付  &  2021年12月13日
+\\
+\hline
+名前  &  武川海斗
+\\
+\hline
+\end{tabular}
+\end{flushright}
+%]
+
+%--------------
+%本文開始
+%--------------
+
+%-------------------------------------------------------------------------
+%\section*{論文情報}
+%-------------------------------------------------------------------------
+%
+%論文の基本情報についてまとめる
+%
+\begin{center}
+{\large 文献情報}
+\begin{table}[hbp]%[H]
+\begin{tabular}{|l||l|}
+\hline
+著者  &  Motonobu Kanagawa, Philipp Hennig,  Dino     Sejdinovic, and Bharath K Sriperumbudur
+\\ \hline
+英文タイトル  &  Gaussian Processes and Kernel Methods: A Review  on Connentions and Equivalences
+\\ \hline
+和文タイトル  & ガウス過程とカーネル法: 接続と等価性に関するレビュー
+\\ \hline
+書誌情報  &  arXiv:18107.02582v1[stat.ML]，2019
+\\ \hline
+キーワード & なし
+\\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
+\section{論文の要約}
+本論文は，ガウス過程とカーネル法の関係性についての研究をまとめた解説論文である．ガウス過程はノンパラメトリックな手法であるが，ベイズ統計学に基づいて，分散についてカーネル関数で表現する．一方，カーネル法とは，入力データを高次元に写像し，再生核ヒルベルト空間で内積計算を行うことで，次元の呪いの影響を受けない手法である．両者にはカーネル関数を通じて，密接な関係がある．特に回帰に関して，ガウス過程回帰とカーネルリッジ回帰に関して，等価性を持つことが知られている．
+しかし，ガウス過程では再生核ヒルベルト空間を通じてカーネルを扱わない点に関して，両者は異なるという意見がある．本論文のメッセージとして，確かに，同様の空間上で計算を行わないが，ガウス過程における計算空間も，再生核ヒルベルト空間の累乗として存在することを主張している．
+
+\section{ガウス過程の定義}
+本論文では，ガウス過程の定義について触れている．卒業論文においても引用した箇所であるため，本報告書においてもまとめを行う．以下に定義とその解釈について述べる．
+
+空ではない$\bm{\chi}$が存在し，平均$m: \bm{\chi} \to \Re $，正定値性を持つ共分散行列$K:\bm{\chi}\times \bm{\chi}\to \Re$が存在する．
+このとき，$m$と$K$を要素にもつランダムな関数$f:\bm{\chi} \to  \Re$をガウス過程と呼び，$\text{GP}(m,K)$と表記する．ここで，$n\in N$の有限集合$\bm{X} = (x_1,x_2,\cdots,x_n) \subset \bm{\chi}$に対して，$\bm{f}_x = \left( \bm{f}(x_1),\bm{f}(x_2),\cdots,\bm{f}(x_n)\right) \in \Re^{n}$
+は多変量正規分布$\text{N}(\bm{m}(\bm{x}),\bm{K})$に従う．ただし，
+\begin{align}
+	\bm{m}(\bm{x}) = \left( m(x_1),m(x_2),\cdots, m(x_n)\right)^T
+\end{align}
+\begin{align}
+	\bm{K} = \left\{k(x_i,x_j) \mid i = 1\sim n,j=1\sim n \right\}
+\end{align}
+に従う．
+
+ここで，$\bm{f}$がガウス過程である場合，平均関数$\bm{m(x)}$と正定値カーネル$\bm{K}$が存在することを意味する．逆に，平均関数$\bm{m}$,正定値カーネル$\bm{K}$が存在する場合，対応するガウス過程$\bm{f}\sim \text{GP}(\bm{m},\bm{K})$が存在する．このように，ガウス過程$\bm{f}\sim \text{GP}(\bm{m},\bm{K})$
+と、平均関数$\bm{m}$と正定値カーネル$\bm{K}$のペアには、一対一の対応関係がある．
+そのため，入力データが観測されれば，$\bm{f}$の事後分布を求めることができ，ガウス過程はベイズ統計の立場から見たカーネル法であると言える．
+
+\section{特に重要な関連研究}
+本論文は，ガウス過程とカーネル法との関連性についてまとめた論文であり，新規手法については提案されていない．従って，本節では，今後の研究で重要となる論文について紹介する．
+
+\subsection{A Hilbert space embedding for distributions}
+一般に，確率分布に対してカーネル法を用いる場合，相互情報量、エントロピー、カルバック・ライブラー発散などの量を計算する必要がある．
+そこで，参考文献\cite{ref1}では，こういった中間密度推定を必要とせずに，分布間の距離を推定する手法について提案を行っている．この理論を考える上で重要となるのが，再生核ヒルベルト空間において，確率分布をどのように扱うかという問題であり，本論文ではその紹介と説明を行っている．
+確率分布とカーネル法との間の橋渡しを行っている論文であり，今後重要であると言える．
+
+\subsection{Kernel measures of conditional dependence}
+参考文献\cite{ref2}は，再生カーネルヒルベルト空間上の正規化交差共分散演算子に基づく，確率変数の条件付き依存性の新しい尺度の提案を行っている．この依存性を，客観的な尺度で評価することは，カーネル法に拡張できるのかを評価できることにつながる．
+
+\begin{thebibliography}{99}
+%
+\bibitem{ref1}
+A. Smola, A. Gretton, L. Song, and B. Scholkopf. A Hilbert space embedding for distributions. \textit{In Proceedings of the International Conference on Algorithmic Learning Theory}, volume 4754, pp.~13-–31. Springer, 2007.
+
+\bibitem{ref2}
+K. Fukumizu, A. Gretton, X. Sun, and B. Scholkopf. Kernel measures of conditional dependence.
+\textit{In Advances in Neural Information Processing Systems 20}, pp.~489-–496, 2008.
+
+
+%
+\end{thebibliography}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\end{document}
